@@ -75,7 +75,7 @@
 
     function getQuote(){
         btn.innerText = 'Loading...'
-        fetch("http://api.quotable.io/random").then(res => res.json()).then(result =>{ 
+        fetch("https://api.quotable.io/random").then(res => res.json()).then(result =>{ 
             // console.log(result)
             quote.innerText ='"' + result.content + '"';
             author.innerText = result.author;
