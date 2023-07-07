@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Generator</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Monomaniac+One&family=Poppins:wght@500&display=swap');
+    /* Parent container */
+    body{
+        font-family: 'Poppins', sans-serif;
+        font-weight: 200 !important;
+    }
+    .center-container {
+      text-align: center;
+     
+    }
+    #next-btn:focus {
+        --bs-btn-focus-shadow-rgb: none !important;
+    }
+    #next-btn{
+     border-radius: 40px;
+     width: 120px;
+     cursor: pointer;
+     float: right;
+    }
+    .card-body {
+      padding: 40px;
+    }
+    
+    div h6 {
+      float: right;
+      margin-right: 5%;
+      font-family: cursive !important;
+    }
+    div h5{
+        
+        margin-bottom: 25px ;
+    }
+  </style>
+</head>
+<body>
+<div style="margin-top: 125px;">
+  <div class="center-container">
+    <div class="container col-10">
+      <div class="card">
+        <div class="card-header">
+          <h3>Quote of the Day</h3>
+        </div>
+        <div class="card-body">
+          <h5 id="quote">
+           Click the button to get the Quote now.
+          </h5>
+          <h6 id="author">
+            ~Divyanshu
+          </h6>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary " id="next-btn">
+            Get Quote
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Include Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const quote = document.querySelector('#quote')
+    const author = document.querySelector('#author')
+    const btn =document.querySelector('#next-btn')
+
+    function getQuote(){
+        btn.innerText = 'Loading...'
+        fetch("http://api.quotable.io/random").then(res => res.json()).then(result =>{ 
+            // console.log(result)
+            quote.innerText ='"' + result.content + '"';
+            author.innerText = result.author;
+            btn.innerText = 'Next quote'
+        });
+    //    
+    }
+    btn.addEventListener('click',getQuote)
+</script>
+</body>
+</html>
