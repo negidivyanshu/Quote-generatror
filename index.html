@@ -1,102 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quote Generator</title>
-  <!-- Include Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Monomaniac+One&family=Poppins:wght@500&display=swap');
-    /* Parent container */
-    body{
-        font-family: 'Poppins', sans-serif;
-        font-weight: 200 !important;
-    }
-    .center-container {
-      text-align: center;
-    }
-    #next-btn:focus {
-        --bs-btn-focus-shadow-rgb: none !important;
-    }
-    #next-btn{
-     border-radius: 40px;
-     width: 120px;
-     cursor: pointer;
-     float: right;
-    }
-    .card-body {
-      padding: 40px;
-    }
-    
-    div h6 {
-      float: right;
-      margin-right: 5%;
-      font-family: cursive !important;
-    }
-    div h5{
-        margin-bottom: 25px ;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophical Quote Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        blockquote {
+            font-style: italic;
+            margin: 20px 0;
+            padding: 10px;
+            border-left: 4px solid #333;
+        }
+
+        footer {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
+
 <body>
-<div style="margin-top: 125px;">
-  <div class="center-container">
-    <div class="container col-10">
-      <div class="card">
-        <div class="card-header">
-          <h3>Quote of the Day</h3>
-        </div>
-        <div class="card-body">
-          <h5 id="quote">
-           Click the button to get the Quote now.
-          </h5>
-          <h6 id="author">
-            ~Divyanshu
-          </h6>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-primary" id="next-btn">
-            Get Quote
-          </button>
-        </div>
-      </div>
+    <div class="container">
+        <h1>Philosophical Quote Generator</h1>
+        <blockquote id="quote">
+            <p id="quote-text">"Click the button to generate a philosophical quote."</p>
+            <footer id="quote-author"></footer>
+        </blockquote>
+        <button id="generate-button">Generate Quote</button>
     </div>
-  </div>
-</div>
-<!-- Include Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quoteText = document.getElementById('quote-text');
+            const quoteAuthor = document.getElementById('quote-author');
+            const generateButton = document.getElementById('generate-button');
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const quote = document.querySelector('#quote');
-    const author = document.querySelector('#author');
-    const btn = document.querySelector('#next-btn');
+            const fetchQuote = async () => {
+                try {
+                    const response = await fetch('https://type.fit/api/quotes');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
 
-    function getQuote() {
-      btn.innerText = 'Loading...';
-      fetch('https://api.quotable.io/random')
-        .then(res => res.json())
-        .then(data => {
-          quote.innerText = `"${data.content}"`;
-          author.innerText = `~${data.author}`;
-          btn.innerText = 'Next Quote';
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          quote.innerText = 'Failed to fetch a quote.';
-          author.innerText = '';
-          btn.innerText = 'Try Again';
+                    // Log the data to understand its structure
+                    console.log('Fetched Quotes:', data);
+
+                    // Select a random quote from the entire list
+                    const randomQuote = data[Math.floor(Math.random() * data.length)];
+
+                    // Check if the quote has text and author
+                    if (randomQuote.text) {
+                        quoteText.textContent = `"${randomQuote.text}"`;
+                        quoteAuthor.textContent = `— ${randomQuote.author || 'Unknown'}`;
+                    } else {
+                        throw new Error('No valid quotes found.');
+                    }
+                } catch (error) {
+                    console.error('Error fetching quote:', error);
+                    quoteText.textContent = 'Failed to fetch a quote. Please try again.';
+                    quoteAuthor.textContent = '';
+                }
+            };
+
+            generateButton.addEventListener('click', fetchQuote);
+
+            // Fetch an initial quote when the page loads
+            fetchQuote();
         });
-    }
-
-    btn.addEventListener('click', getQuote);
-
-    // Fetch a quote when the page loads
-    getQuote();
-  });
-</script>
-
+    </script>
 </body>
-</html>
 
+</html>
