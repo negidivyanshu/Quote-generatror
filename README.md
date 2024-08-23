@@ -1,4 +1,4 @@
-Quote Generator
+Quote Generator.
 Project Description
 The Quote Generator is a simple tool that generates random quotes. Whether you're looking for inspiration, motivation, or just a bit of wisdom, this generator provides you with a diverse range of quotes from various authors and topics.
 
